@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">FIO Interface</string>
+
+    <string-array name="job_type">
+        <item>Read</item>
+        <item>Write</item>
+        <item>Random Read</item>
+        <item>Random Write</item>
+    </string-array>
+
+    <string-array name="io_engine_options">
+        <item>libaio</item>
+        <item>sync</item>
+        <item>pvsync</item>
+        <item>mmap</item>
+    </string-array>
 </resources>
