@@ -1,8 +1,6 @@
 package com.qualcomm.fiointerface
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.Spinner
@@ -16,72 +14,79 @@ import androidx.core.view.WindowInsetsCompat
 import java.io.File
 
 class CreateJobFileActivity : AppCompatActivity() {
+    //TODO: add validation function that stops size from being smaller than bs
+    private lateinit var ioEngineSpinner: Spinner
+    private lateinit var ioTypeSpinner: Spinner
+    private lateinit var jobSizeSuffixSpinner: Spinner
+    private lateinit var blockSizeSuffixSpinner: Spinner
+    private lateinit var jobName: EditText
+    private lateinit var numberOfJobs: EditText
+    private lateinit var blockSize: EditText
+    private lateinit var ioDepth: EditText
+    private lateinit var jobSize: EditText
+    private lateinit var bypassCache: CheckBox
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        // action bar set up
         setContentView(R.layout.activity_create_job_file)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Create Job File"
-
-        // spinners and input data
-        val ioEngineSpinner: Spinner = findViewById(R.id.ioEngineSpinner)
-        val jobName: EditText = findViewById(R.id.jobNameEntry)
-        val numberOfJobs: EditText = findViewById(R.id.jobNumberEntry)
-        val blockSize: EditText = findViewById(R.id.blockSizeEntry)
-        val ioDepth: EditText = findViewById(R.id.ioDepthEntry)
-        val jobSize: EditText = findViewById(R.id.jobSizeEntry)
-        val bypassCache: CheckBox = findViewById(R.id.bypassCacheCheckbox)
-
-        // setting up drop down menus
-        val adapter = ArrayAdapter.createFromResource(
-            this,
-            R.array.io_engine_options,
-            android.R.layout.simple_spinner_item
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        ioEngineSpinner.adapter = adapter
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.create_job)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        // action bar set up
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Create Job File"
+
+        ioEngineSpinner = findViewById(R.id.ioEngineSpinner)
+        ioTypeSpinner = findViewById(R.id.ioTypeSpinner)
+        jobSizeSuffixSpinner = findViewById(R.id.jobSizeSuffixSpinner)
+        blockSizeSuffixSpinner = findViewById(R.id.blockSizeSuffixSpinner)
+        jobName = findViewById(R.id.jobNameEntry)
+        numberOfJobs = findViewById(R.id.jobNumberEntry)
+        blockSize = findViewById(R.id.blockSizeEntry)
+        ioDepth = findViewById(R.id.ioDepthEntry)
+        jobSize = findViewById(R.id.jobSizeEntry)
+        bypassCache = findViewById(R.id.bypassCacheCheckbox)
+
+        // set up drop down menus
+        setUpSpinners()
+
         // when submit button is pressed a job file gets created
         val submitJobFileBttn: Button = findViewById(R.id.submitJobFile)
         submitJobFileBttn.setOnClickListener {
-            fun writeFioFile(context: Context, fileName: String, content: String) {
-                val file = File(context.getExternalFilesDir(null), "$fileName.fio")
-                file.writeText(content)
-            }
+            val fioString = StringBuilder()
 
-            fun addOptionToFIOFile(
-                option: EditText,
-                fioKeyword: String,
-                fioContent: StringBuilder
-            ) {
-                if (option.text.toString() != "") {
-                    fioContent.appendLine("$fioKeyword=${option.text}")
-                }
-            }
-
-            val fioContent = StringBuilder()
+            // processing user input into string
             val jobNameString: String =
                 if (jobName.text.toString() == "") "test" else jobName.text.toString()
+            fioString.appendLine("[$jobNameString]")
+
             val bypassCacheString: String =
                 if (bypassCache.isChecked) "1" else "0"
+            fioString.appendLine("direct=$bypassCacheString")
 
-            fioContent.appendLine("[$jobNameString]")
-            fioContent.appendLine("ioengine=${ioEngineSpinner.selectedItem}")
-            fioContent.appendLine("direct=$bypassCacheString")
-            addOptionToFIOFile(numberOfJobs, "numjobs", fioContent)
-            addOptionToFIOFile(blockSize, "bs", fioContent)
-            addOptionToFIOFile(ioDepth, "iodepth", fioContent)
-            addOptionToFIOFile(jobSize, "size", fioContent)
+            fioString.appendLine("ioengine=${ioEngineSpinner.selectedItem}")
 
-            writeFioFile(this, jobNameString, fioContent.toString())
+            fioString.appendLine("rw=${ioTypeSpinner.selectedItem}")
+
+            if (numberOfJobs.text.toString().isNotBlank())
+                fioString.appendLine("numjobs=${numberOfJobs.text}")
+
+            if (ioDepth.text.toString().isNotBlank())
+                fioString.appendLine("iodepth=${ioDepth.text}")
+
+            if (jobSize.text.toString().isNotBlank())
+                fioString.appendLine("size=${jobSize.text}${jobSizeSuffixSpinner.selectedItem}")
+
+            if (blockSize.text.toString().isNotBlank())
+                fioString.appendLine("bs=${blockSize.text}${blockSizeSuffixSpinner.selectedItem}")
+
+            // writing the data out to an fio job file
+            val file = File(this.getExternalFilesDir(null), "$jobNameString.fio")
+            file.writeText(fioString.toString())
         }
     }
 
@@ -95,5 +100,34 @@ class CreateJobFileActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun setUpSpinners() {
+        val ioEngineAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.io_engine_options,
+            android.R.layout.simple_spinner_item
+        )
+        ioEngineAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        val ioTypeAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.io_type_options,
+            android.R.layout.simple_spinner_item
+        )
+        ioTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        val suffixAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.integer_suffix_options,
+            android.R.layout.simple_spinner_item
+        )
+        suffixAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // Adding the adapters to the spinner objects
+        ioEngineSpinner.adapter = ioEngineAdapter
+        ioTypeSpinner.adapter = ioTypeAdapter
+        jobSizeSuffixSpinner.adapter = suffixAdapter
+        blockSizeSuffixSpinner.adapter = suffixAdapter
     }
 }

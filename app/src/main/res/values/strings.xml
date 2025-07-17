@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">FIO Interface</string>
 
-    <string-array name="job_type">
-        <item>Read</item>
-        <item>Write</item>
-        <item>Random Read</item>
-        <item>Random Write</item>
+    <string-array name="io_type_options">
+        <item>read</item>
+        <item>write</item>
+        <item>readwrite</item>
+        <item>randread</item>
+        <item>randwrite</item>
+        <item>randrw</item>
     </string-array>
 
     <string-array name="io_engine_options">
@@ -13,5 +15,18 @@
         <item>sync</item>
         <item>pvsync</item>
         <item>mmap</item>
+    </string-array>
+
+    <string-array name="integer_suffix_options">
+        <item>K</item>
+        <item>Ki</item>
+        <item>M</item>
+        <item>Mi</item>
+        <item>G</item>
+        <item>Gi</item>
+        <item>T</item>
+        <item>Ti</item>
+        <item>P</item>
+        <item>Pi</item>
     </string-array>
 </resources>
