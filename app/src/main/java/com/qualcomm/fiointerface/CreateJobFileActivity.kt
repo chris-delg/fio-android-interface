@@ -1,6 +1,7 @@
 package com.qualcomm.fiointerface
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.Spinner
@@ -15,7 +16,6 @@ import androidx.core.view.WindowInsetsCompat
 import java.io.File
 
 class CreateJobFileActivity : AppCompatActivity() {
-    //TODO: add validation function that stops size from being smaller than bs
     private lateinit var ioEngineSpinner: Spinner
     private lateinit var ioTypeSpinner: Spinner
     private lateinit var jobSizeSuffixSpinner: Spinner
@@ -56,8 +56,11 @@ class CreateJobFileActivity : AppCompatActivity() {
         setUpSpinners()
 
         // when submit button is pressed a job file gets created
-        val submitJobFileBttn: Button = findViewById(R.id.submitJobFile)
-        submitJobFileBttn.setOnClickListener {
+        findViewById<Button>(R.id.submitJobFile).setOnClickListener {
+            if (!validateInputs()) {
+                return@setOnClickListener
+            }
+
             val fioString = StringBuilder()
 
             // processing user input into string
@@ -145,6 +148,16 @@ class CreateJobFileActivity : AppCompatActivity() {
             )
         ) {
             Toast.makeText(this, "Size cannot be smaller than block size", Toast.LENGTH_SHORT)
+                .show()
+            validation = false
+        }
+
+        if (!validationChecker.validateSizeNotEmptyWhenBlockSizeNotEmpty(
+                blockSize = blockSize.text.toString(),
+                size = jobSize.text.toString()
+            )
+        ) {
+            Toast.makeText(this, "Size cannot be empty if block size is filled out", Toast.LENGTH_SHORT)
                 .show()
             validation = false
         }
