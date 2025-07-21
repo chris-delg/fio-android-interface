@@ -7,6 +7,7 @@ import android.widget.Spinner
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -87,6 +88,7 @@ class CreateJobFileActivity : AppCompatActivity() {
             // writing the data out to an fio job file
             val file = File(this.getExternalFilesDir(null), "$jobNameString.fio")
             file.writeText(fioString.toString())
+            Toast.makeText(this, "Successfully created job file", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -129,5 +131,24 @@ class CreateJobFileActivity : AppCompatActivity() {
         ioTypeSpinner.adapter = ioTypeAdapter
         jobSizeSuffixSpinner.adapter = suffixAdapter
         blockSizeSuffixSpinner.adapter = suffixAdapter
+    }
+
+    private fun validateInputs(): Boolean {
+        val validationChecker = JobFileInputValidation()
+        var validation = true
+
+        if (!validationChecker.validateSizeGreaterThanBlockSize(
+                blockSize = blockSize.text.toString(),
+                blockSizeSuffix = blockSizeSuffixSpinner.selectedItem.toString(),
+                size = jobSize.text.toString(),
+                sizeSuffix = jobSizeSuffixSpinner.selectedItem.toString()
+            )
+        ) {
+            Toast.makeText(this, "Size cannot be smaller than block size", Toast.LENGTH_SHORT)
+                .show()
+            validation = false
+        }
+
+        return validation
     }
 }
