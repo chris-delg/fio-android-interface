@@ -29,26 +29,34 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/jobHeadingTitle" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
     <!-- Views on left side -->
+
     <TextView
         android:id="@+id/jobNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:text="Job Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="@+id/jobNumberLabel"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/jobHeadingDivider" />
 
     <TextView
-        android:id="@+id/jobNumberLabel"
+        android:id="@+id/ioTypeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="48dp"
-        android:text="Number of Jobs"
+        android:text="I/O Type"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/jobNameLabel"
         app:layout_constraintTop_toBottomOf="@+id/jobNameLabel" />
 
     <TextView
@@ -57,6 +65,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="I/O Engine"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="@+id/ioTypeLabel"
+        app:layout_constraintTop_toBottomOf="@+id/ioTypeLabel" />
+
+    <TextView
+        android:id="@+id/jobNumberLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Number of Jobs"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="@+id/ioEngineLabel"
+        app:layout_constraintTop_toBottomOf="@+id/ioEngineLabel" />
+
+    <TextView
+        android:id="@+id/sizePerJobLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Size Per Job"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="@+id/jobNumberLabel"
         app:layout_constraintTop_toBottomOf="@+id/jobNumberLabel" />
@@ -68,8 +96,8 @@
         android:layout_marginTop="48dp"
         android:text="Block Size"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="@+id/ioEngineLabel"
-        app:layout_constraintTop_toBottomOf="@+id/ioEngineLabel" />
+        app:layout_constraintEnd_toEndOf="@+id/sizePerJobLabel"
+        app:layout_constraintTop_toBottomOf="@+id/sizePerJobLabel" />
 
     <TextView
         android:id="@+id/ioDepthLabel"
@@ -82,104 +110,116 @@
         app:layout_constraintTop_toBottomOf="@+id/blockSizeLabel" />
 
     <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Job Size"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="@+id/ioDepthLabel"
-        app:layout_constraintTop_toBottomOf="@+id/ioDepthLabel" />
-
-    <TextView
         android:id="@+id/bypassCacheLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="Bypass Cache"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="@+id/textView7"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintEnd_toEndOf="@+id/ioDepthLabel"
+        app:layout_constraintTop_toBottomOf="@+id/ioDepthLabel" />
 
     <!-- Views on right side -->
     <EditText
-        android:id="@+id/editTextText"
-        android:layout_width="wrap_content"
+        android:id="@+id/jobNameEntry"
+        android:layout_width="150dp"
         android:layout_height="48dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
         android:ems="10"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="@+id/jobNameLabel"
-        app:layout_constraintStart_toEndOf="@+id/jobNameLabel"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/jobNameLabel" />
 
+    <Spinner
+        android:id="@+id/ioTypeSpinner"
+        android:layout_width="165dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ioTypeLabel"
+        app:layout_constraintStart_toStartOf="@+id/jobNameEntry"
+        app:layout_constraintTop_toTopOf="@+id/ioTypeLabel" />
+
+    <Spinner
+        android:id="@+id/ioEngineSpinner"
+        android:layout_width="165dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ioEngineLabel"
+        app:layout_constraintStart_toStartOf="@+id/ioTypeSpinner"
+        app:layout_constraintTop_toTopOf="@+id/ioEngineLabel" />
+
     <EditText
-        android:id="@+id/editTextNumberSigned"
-        android:layout_width="wrap_content"
+        android:id="@+id/jobNumberEntry"
+        android:layout_width="150dp"
         android:layout_height="48dp"
         android:ems="10"
         android:inputType="numberSigned"
         app:layout_constraintBottom_toBottomOf="@+id/jobNumberLabel"
-        app:layout_constraintStart_toStartOf="@+id/editTextText"
+        app:layout_constraintStart_toStartOf="@+id/ioEngineSpinner"
         app:layout_constraintTop_toTopOf="@+id/jobNumberLabel" />
 
-    <Spinner
-        android:id="@+id/spinner2"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/jobSizeEntry"
+        android:layout_width="80dp"
         android:layout_height="48dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="@+id/ioEngineLabel"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberSigned"
-        app:layout_constraintTop_toTopOf="@+id/ioEngineLabel" />
+        android:ems="10"
+        android:inputType="numberSigned"
+        app:layout_constraintBottom_toBottomOf="@+id/sizePerJobLabel"
+        app:layout_constraintStart_toStartOf="@+id/jobNumberEntry"
+        app:layout_constraintTop_toTopOf="@+id/sizePerJobLabel" />
+
+    <Spinner
+        android:id="@+id/jobSizeSuffixSpinner"
+        android:layout_width="85dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/jobSizeEntry"
+        app:layout_constraintStart_toEndOf="@+id/jobSizeEntry"
+        app:layout_constraintTop_toTopOf="@+id/jobSizeEntry" />
 
     <EditText
-        android:id="@+id/editTextNumberSigned2"
-        android:layout_width="wrap_content"
+        android:id="@+id/blockSizeEntry"
+        android:layout_width="80dp"
         android:layout_height="48dp"
         android:ems="10"
         android:inputType="numberSigned"
         app:layout_constraintBottom_toBottomOf="@+id/blockSizeLabel"
-        app:layout_constraintStart_toStartOf="@+id/spinner2"
+        app:layout_constraintStart_toStartOf="@+id/jobSizeEntry"
         app:layout_constraintTop_toTopOf="@+id/blockSizeLabel" />
 
+    <Spinner
+        android:id="@+id/blockSizeSuffixSpinner"
+        android:layout_width="85dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/blockSizeEntry"
+        app:layout_constraintStart_toEndOf="@+id/blockSizeEntry"
+        app:layout_constraintTop_toTopOf="@+id/blockSizeEntry" />
+
     <EditText
-        android:id="@+id/editTextNumberSigned3"
-        android:layout_width="wrap_content"
+        android:id="@+id/ioDepthEntry"
+        android:layout_width="150dp"
         android:layout_height="48dp"
         android:ems="10"
         android:inputType="numberSigned"
         app:layout_constraintBottom_toBottomOf="@+id/ioDepthLabel"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberSigned2"
+        app:layout_constraintStart_toStartOf="@+id/blockSizeEntry"
         app:layout_constraintTop_toTopOf="@+id/ioDepthLabel" />
 
-    <EditText
-        android:id="@+id/editTextNumberSigned4"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:ems="10"
-        android:hint="Data SIze Per Job (MB)"
-        android:inputType="numberSigned"
-        app:layout_constraintBottom_toBottomOf="@+id/textView7"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberSigned3"
-        app:layout_constraintTop_toTopOf="@+id/textView7" />
-
-    <!-- Submission button -->
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/bypassCacheCheckbox"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/bypassCacheLabel"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberSigned4"
+        app:layout_constraintStart_toStartOf="@+id/ioDepthEntry"
         app:layout_constraintTop_toTopOf="@+id/bypassCacheLabel" />
 
+    <!-- Submission button -->
     <Button
         android:id="@+id/submitJobFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="156dp"
         android:layout_marginTop="32dp"
         android:text="Submit"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bypassCacheLabel" />
 

@@ -39,3 +39,4 @@ google-services.json
 # Extras
 .DS_Store
 .kotlin
+.vscode/
