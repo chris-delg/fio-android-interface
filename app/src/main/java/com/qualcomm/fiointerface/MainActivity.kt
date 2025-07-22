@@ -20,8 +20,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // when create job file button is pressed user gets sent to creation page
-        val createJobFileBttn: Button = findViewById(R.id.createJobFile)
-        createJobFileBttn.setOnClickListener {
+        findViewById<Button>(R.id.createJobFile).setOnClickListener {
             val intent = Intent(this, CreateJobFileActivity::class.java)
             startActivity(intent)
         }

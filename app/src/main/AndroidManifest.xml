@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="CreateJobFileActivity" />
+        <activity android:name=".CreateJobFileActivity" />
     </application>
 
 </manifest>
